@@ -1,0 +1,7 @@
+<<<<<<< HEAD
+numpy
+matplotlib
+=======
+numpy
+matplotlib
+>>>>>>> ekta-simulation

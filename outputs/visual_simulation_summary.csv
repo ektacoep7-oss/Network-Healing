@@ -1,0 +1,9 @@
+Metric,Value
+Total Instances,20
+Total Clusters,4
+Simulation Steps,200
+Total Faults Detected,1239
+Task Completion Rate,100.00%
+Job Drop Rate,0.00%
+Mean Latency (ms),109.25
+Mean Time To Heal (steps),0.0
