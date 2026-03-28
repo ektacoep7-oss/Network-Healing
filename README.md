@@ -86,5 +86,3 @@ Local prototype demo (single machine, multiple processes) will be added later:
 ```bash
 python3 -m ftgso_sim.prototype.demo
 ```
-
->>>>>>> ekta-simulation
