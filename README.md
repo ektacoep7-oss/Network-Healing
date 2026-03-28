@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # FTGSO (paper adaptation) — Simulation + Local Prototype
 
 This project adapts ideas from **“Self-healing and optimal fault tolerant routing in wireless sensor networks using genetical swarm optimization” (Computer Networks, 2022)** to **normal computers/services**.
