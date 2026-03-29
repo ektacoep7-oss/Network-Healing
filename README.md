@@ -4,21 +4,22 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests Passing](https://img.shields.io/badge/tests-passing-brightgreen.svg)]()
 
-**SC-FTGSO** — A complete framework adapting WSN routing optimization research to **Local Area Network (LAN) server environments**. Implements hybrid **genetical swarm optimization (GSO = PSO + GA)** for intelligent request routing with automatic fault detection and multi-layer self-healing.
+**SC-FTGSO** — A complete framework adapting WSN routing optimization research to **Local Area Network (LAN) server environments**. Implements hybrid **genetical swarm optimization (GSO = PSO + GA)** for intelligent request routing with automatic fault detection, reactive cluster head re-election, and multi-layer self-healing.
 
 **Paper:** *"Self-healing and optimal fault tolerant routing in wireless sensor networks using genetical swarm optimization"* (Computer Networks, 2022)
 
 ---
 
-## 🎯 What This Does
+## What This Does
 
 Routes incoming requests across a cluster of servers by:
-1. ✅ **Clustering servers** into groups with master node election
-2. ✅ **Detecting faults** (hard/soft/transient failures)
-3. ✅ **Optimizing placement** using hybrid PSO+GA optimization
-4. ✅ **Self-healing** with 3-layer recovery mechanism
-5. ✅ **Tracking metrics** (TCR, JDR, JTT, MTTH)
-6. ✅ **Comparing policies** against industry baselines
+1. Clustering servers into groups with master node election
+2. Detecting faults (hard/soft/transient failures)
+3. Re-electing cluster heads on failure or overload (Stage 2b)
+4. Optimizing placement using hybrid PSO+GA optimization
+5. Self-healing with 3-layer recovery mechanism
+6. Tracking metrics (TCR, JDR, JTT, MTTH)
+7. Comparing policies against industry baselines
 
 **Key Results:**
 - **GSO + Healing achieves 79.83% task completion** vs 40% Round-Robin
@@ -27,7 +28,7 @@ Routes incoming requests across a cluster of servers by:
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### Option 1: Development Setup
 ```bash
@@ -49,14 +50,14 @@ pip install -e ".[dev]"  # Includes pytest, jupyter tools
 
 ### Verify Installation
 ```bash
-python3 -c "import ftgso_sim; print('✅ FTGSO imported successfully')"
+python3 -c "import ftgso_sim; print('FTGSO imported successfully')"
 ```
 
 ---
 
-## 🚀 Quick Start: 5-Minute Demo
+## Quick Start: 5-Minute Demo
 
-### 1️⃣ Run Default Simulation
+### 1. Run Default Simulation
 ```bash
 python3 -m ftgso_sim.sim.run
 ```
@@ -71,7 +72,7 @@ fitness-policy: PDR=0.6904, PLR=0.3096, E2E=13.72ms
 Round-robin:    PDR=0.4037, PLR=0.5963, E2E=147.52ms
 ```
 
-### 2️⃣ Parameter Sweep (Multiple Configurations)
+### 2. Parameter Sweep (Multiple Configurations)
 ```bash
 python3 -m ftgso_sim.sim.sweep \
   --n-instances 20 \
@@ -80,7 +81,7 @@ python3 -m ftgso_sim.sim.sweep \
 ```
 **Output:** `sweep_outputs/*.csv` — Results across different system sizes/loads
 
-### 3️⃣ Ablation Study (Component Analysis)
+### 3. Ablation Study (Component Analysis)
 ```bash
 python3 -m ftgso_sim.sim.ablation
 ```
@@ -92,7 +93,7 @@ python3 -m ftgso_sim.sim.ablation
 
 **Output:** `ablation_outputs/ablation_summary.csv`
 
-### 4️⃣ Live Multiprocess Demo
+### 4. Live Multiprocess Demo
 ```bash
 python3 -m ftgso_sim.prototype.demo \
   --workers 8 \
@@ -108,13 +109,27 @@ Request routing (8 workers):
 - Requests routed: 100/100 (100% success)
 ```
 
-### 5️⃣ Jupyter Visualization
+### 5. Interactive Animation with Re-election Visualization
+```bash
+streamlit run animated_simulation.py
+```
+Live network topology with:
+- Health status of each node (colored circles)
+- Cluster heads (green stars = stable, orange stars = newly re-elected)
+- Real-time event log showing head re-election triggers
+- Healing layer activity (L1/L2/L3) with re-election counts
+- PDR/latency/fault trends over time
+
+Configure nodes, steps, and animation speed in the sidebar, then click "Build & Animate" to see re-elections happen.
+
+### 6. Jupyter Visualization
 ```bash
 jupyter notebook notebooks/analysis.ipynb
 ```
-Opens interactive notebook with 10+ plots covering all 7 stages:
+Opens interactive notebook with 10+ plots covering all 8 stages:
 - Resource distribution & cluster topology
 - Fault detection patterns
+- Re-election frequency and reasons
 - Self-healing effectiveness
 - Policy comparison charts
 
@@ -126,7 +141,7 @@ Opens interactive notebook with 10+ plots covering all 7 stages:
 CN_project/
 ├── ftgso_sim/                  ← Core package
 │   ├── model.py                # Data structures
-│   ├── cluster.py              # Stage 2: Clustering
+│   ├── cluster.py              # Stage 2a: Clustering & 2b: Re-election
 │   ├── fault.py + gossip.py    # Stage 3: Fault detection
 │   ├── fitness.py              # Stage 4: Multi-objective function
 │   ├── healing.py              # Stage 5: Self-healing
@@ -167,7 +182,7 @@ CN_project/
 
 ---
 
-## 📊 Key Concepts
+## Key Concepts
 
 ### Paper → LAN Adaptation
 
@@ -176,15 +191,18 @@ CN_project/
 | **Energy** | Battery % | Server capacity headroom | `headroom` metric |
 | **Sensors** | IoT devices | Server instances | `Instance` class |
 | **Cluster Head** | Sink aggregating data | Master coordinating requests | `ClusterManager` |
+| **Head Election** | Periodic rotation | Reactive on health events | `_check_and_reelect_heads()` |
 | **Failures** | Battery drain, signal loss | Network issues, overload | `FaultDetector` (3 types) |
 | **Routing** | Multi-hop path selection | Instance selection | `select_candidate_gso()` |
 
-### 7-Stage Architecture
+### 8-Stage Architecture
 
 ```
 Stage 1: Resource Modeling → Create instances with 3 tiers
          ↓
-Stage 2: Clustering & Election → Form groups, elect masters
+Stage 2a: Clustering & Election → Form groups, elect initial masters
+         ↓
+Stage 2b: Reactive Re-election → Re-elect heads on hard fault or overload
          ↓
 Stage 3: Fault Detection & Gossip → Detect + disseminate faults
          ↓
@@ -192,10 +210,27 @@ Stage 4: Multi-Objective Optimization → PSO explores, GA refines
          ↓
 Stage 5: 3-Layer Self-Healing → Drain, migrate, shed
          ↓
-Stage 6: Performance Metrics → Track TCR, JDR, JTT, MTTH
+Stage 6: Performance Metrics → Track TCR, JDR, JTT, MTTH, Re-elections
          ↓
 Stage 7: Policy Comparison → Baseline validation
 ```
+
+### Reactive Cluster Head Re-election (Stage 2b)
+
+Unlike WSN periodic rotation (inefficient for LANs), this implementation uses health-based re-election triggers:
+
+Re-election fires when:
+1. **Hard Fault**: Current cluster head becomes unreachable (network failure, crash)
+   - Immediate re-election to the next best healthy member in the cluster
+2. **Critical Overload**: Head fitness score drops below 0.15 (resource exhaustion)
+   - Re-election only if better candidate exists (fitness > 0.30)
+   - Avoids thrashing if all members equally unhealthy
+
+Benefits for LAN networks:
+- Reactive rather than periodic (saves overhead)
+- Per-cluster scoped (preserves topology)
+- Health-aware (prevents cascading failures)
+- All re-election events tracked in metrics for analysis
 
 ### Multi-Objective Fitness Calculation
 
@@ -203,13 +238,76 @@ Routing selection based on weighted 5-objective score [0, 1]:
 
 - **0.25 × Latency** (lower is better)
 - **0.15 × Network Penalty** (lower is better)  
-- **0.25 × Headroom** (higher is better) ⭐ Replaces "energy %" from WSN paper
+- **0.25 × Headroom** (higher is better) - Replaces "energy %" from WSN paper
 - **0.20 × Serveability** (higher is better)
 - **0.15 × Fault History** (lower fault count is better)
 
 ---
 
-## 🔧 Advanced Usage
+## Stage 2b: Reactive Cluster Head Re-election
+
+### Overview
+
+During simulation, cluster heads may fail or become overloaded. Stage 2b implements reactive re-election to maintain network resilience.
+
+### When Re-elections Occur
+
+**Scenario 1: Hard Fault**
+- Current cluster head fails (network crash, disconnection)
+- All healthy members in the cluster become candidates
+- Next highest-fitness healthy member becomes new head
+- Re-election recorded with old/new head IDs and timestamp
+
+**Scenario 2: Critical Overload**
+- Current cluster head is healthy but fitness score drops below 0.15
+- Only members with better fitness (> 0.30) become candidates
+- If better candidate exists, immediate re-election
+- If all members equally degraded, head remains (no thrashing)
+
+### Observing Re-elections
+
+**In animated_simulation.py:**
+- Orange stars in network topology = newly re-elected heads (this step only)
+- Green stars = stable heads (elected in previous steps)
+- Event log shows: `[HEAD] Cluster X: head #OLD -> #NEW (reason)`
+
+**In metrics:**
+```python
+metrics = collector.get_metrics()
+print(f"Total re-elections: {metrics.cluster_head_reelection_count}")
+# Returns: [(step, cluster_id, old_head_id, new_head_id), ...]
+for event in metrics.cluster_head_reelections:
+    print(event)
+```
+
+**In output CSV:**
+- `outputs/summary.csv` includes re-election count for each policy run
+- Re-elections tracked per simulation for analysis
+
+### Why This Matters for LANs
+
+The paper's WSN approach used periodic re-election (like LEACH protocol), which is:
+- **Wasteful on LANs**: Extra overhead with frequent elections
+- **Not health-aware**: Doesn't consider actual node state
+- **Inefficient**: Rotates working heads out unnecessarily
+
+This LAN-optimized approach is:
+- **On-demand**: Only elects when needed (hard fault or overload)
+- **Efficient**: Minimal overhead, no periodic rotation
+- **Smart**: Respects cluster topology and health status
+- **Traceable**: All events record old/new heads for debugging
+
+### Re-election Parameters
+
+In `animated_simulation.py`:
+```python
+HEAD_OVERLOAD_THRESHOLD = 0.15      # Fitness below this triggers re-election
+BETTER_CANDIDATE_THRESHOLD = 0.30   # Only consider members with this fitness or higher
+```
+
+These can be tuned in `AnimSimConfig` or hardcoded in `step2.py` for different networks.
+
+---
 
 ### Run with Custom Configuration
 ```bash
@@ -242,18 +340,18 @@ rm -rf build dist *.egg-info .pytest_cache
 
 ---
 
-## 📈 Example Results
+## Example Results
 
 ### Default Simulation (50 instances, 600 steps)
 
 | Policy | PDR | PLR | E2E (ms) | Notes |
 |--------|-----|-----|----------|-------|
-| **GSO + Healing** | **79.83%** | **20.17%** | **83.32** | ✅ BEST |
+| **GSO + Healing** | **79.83%** | **20.17%** | **83.32** | BEST |
 | Fitness baseline | 69.08% | 30.92% | 13.93 | Baseline |
 | Least-loaded | 59.76% | 40.24% | 67.21 | Greedy |
 | GSO only | 69.96% | 29.04% | 102.15 | No healing |
 | Least-latency | 37.29% | 62.71% | 18.05 | Myopic |
-| Round-robin | 40.37% | 59.63% | 147.52 | ❌ WORST |
+| Round-robin | 40.37% | 59.63% | 147.52 | WORST |
 
 **Metrics:**
 - PDR = Packet Delivery Rate (higher is better → more tasks completed)
@@ -271,7 +369,7 @@ rm -rf build dist *.egg-info .pytest_cache
 
 ---
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 ### Import Error: `ModuleNotFoundError: No module named 'ftgso_sim'`
 ```bash
@@ -296,13 +394,13 @@ jupyter notebook notebooks/analysis.ipynb
 
 ---
 
-## 📝 License
+## License
 
 MIT License — See [LICENSE](LICENSE) file
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome! Please:
 
@@ -315,7 +413,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ---
 
-## 📚 Citation
+## Citation
 
 If you use this project, please cite the original paper:
 
@@ -329,21 +427,21 @@ If you use this project, please cite the original paper:
 
 ---
 
-## 🎓 Educational Value
+## Educational Value
 
 This project demonstrates:
-- ✅ Adapting research (WSN) to new domains (LANs/servers)
-- ✅ Hybrid optimization algorithms (PSO + GA)
-- ✅ Multi-objective decision making
-- ✅ Fault tolerance & self-healing systems
-- ✅ Professional Python package structure
-- ✅ Reproducible research & ablation studies
-- ✅ Comprehensive testing & visualization
+- Adapting research (WSN) to new domains (LANs/servers)
+- Hybrid optimization algorithms (PSO + GA)
+- Multi-objective decision making
+- Fault tolerance & self-healing systems
+- Professional Python package structure
+- Reproducible research & ablation studies
+- Comprehensive testing & visualization
 
 Perfect for learning about **distributed systems**, **optimization algorithms**, and **systems research**!
 
 ---
 
-## 📧 Questions?
+## Questions?
 
 Check the [docs/](docs/) directory or open an issue.
