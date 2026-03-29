@@ -28,18 +28,7 @@ class GossipProtocol:
     Stage 3: PSO phase - distributed anomaly share.
     """
 
-<<<<<<< HEAD
     def __init__(self, max_hops: int = 3, dissemination_prob: float = 0.8):
-=======
-    def __init__(self, max_hops: int = 2, dissemination_prob: float = 0.85):
-        """
-        Initialize gossip protocol.
-        
-        ⭐ OPTIMIZED parameters:
-        - max_hops: 2 (reduced from 3, fewer redundant transmissions)
-        - dissemination_prob: 0.85 (increased from 0.8, more reliable spread)
-        """
->>>>>>> ekta-simulation
         self.max_hops = max_hops
         self.dissemination_prob = dissemination_prob
         self.message_queue: list[AnomalyMessage] = []

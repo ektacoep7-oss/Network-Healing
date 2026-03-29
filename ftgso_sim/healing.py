@@ -36,17 +36,10 @@ class SelfHealingManager:
 
     def __init__(
         self,
-<<<<<<< HEAD
         cooldown_steps: int = 8,
         recovery_boost: float = 0.35,
         migration_threshold: float = 0.4,
         shed_threshold: float = 0.2,
-=======
-        cooldown_steps: int = 6,      # ⭐ OPTIMIZED: Shorter for faster recovery
-        recovery_boost: float = 0.45,  # ⭐ OPTIMIZED: Stronger boost
-        migration_threshold: float = 0.35,  # ⭐ OPTIMIZED: Lower = more aggressive migration
-        shed_threshold: float = 0.15,  # ⭐ OPTIMIZED: More conservative shedding
->>>>>>> ekta-simulation
     ):
         self.cooldown_steps = cooldown_steps
         self.recovery_boost = recovery_boost
