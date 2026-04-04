@@ -135,7 +135,7 @@ Opens interactive notebook with 10+ plots covering all 8 stages:
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 CN_project/
@@ -438,7 +438,7 @@ This project demonstrates:
 - Reproducible research & ablation studies
 - Comprehensive testing & visualization
 
-Perfect for learning about **distributed systems**, **optimization algorithms**, and **systems research**!
+Perfect for learning about **distributed systems**, **optimization algorithms** and **systems research**!
 
 ---
 
