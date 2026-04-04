@@ -442,6 +442,3 @@ Perfect for learning about **distributed systems**, **optimization algorithms** 
 
 ---
 
-## Questions?
-
-Check the [docs/](docs/) directory or open an issue.
