@@ -32,29 +32,29 @@ Multi-Objective Selection (Paper §3.3.2):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Objective 1: Proximity (minimize)                               │
 │   Paper: Minimize transmission distance                         │
-│   Your LAN: Minimize network latency [1-500 ms]                │
+│   Your LAN: Minimize network latency [1-500 ms]                 │
 │   Weight: 0.25                                                  │
 │                                                                 │
 │ Objective 2: Communication Cost (minimize)                      │
-│   Paper: Minimize retransmissions/jitter                       │
-│   Your LAN: Minimize network penalty [0-1]                     │
+│   Paper: Minimize retransmissions/jitter                        │
+│   Your LAN: Minimize network penalty [0-1]                      │
 │   Weight: 0.15                                                  │
 │                                                                 │
 │ Objective 3: Residual Energy (maximize)                         │
 │   Paper: Maximize battery remaining (%)                         │
-│   🔑 Your LAN: Maximize capacity headroom [0-1]                │
-│      = 1 - (cpu_util + mem_util + io_util) / 3                │
-│   Weight: 0.25  ← CRITICAL ADAPTATION                         │
+│       Your LAN: Maximize capacity headroom [0-1]                │
+│      = 1 - (cpu_util + mem_util + io_util) / 3                  │
+│   Weight: 0.25  ← CRITICAL ADAPTATION                           │
 │                                                                 │
 │ Objective 4: Coverage (maximize)                                │
 │   Paper: Node availability                                      │
-│   Your LAN: Service readiness/availability [0-1]               │
+│   Your LAN: Service readiness/availability [0-1]                │
 │   Weight: 0.20                                                  │
 │                                                                 │
 │ [NEW] Objective 5: Fault History (maximize) - Stage 4           │
 │   Paper: Not explicitly included                                │
-│   Your LAN: Penalize instances with fault history              │
-│   Weight: 0.15  ← ENHANCEMENT FOR RELIABILITY                  │
+│   Your LAN: Penalize instances with fault history               │
+│   Weight: 0.15  ← ENHANCEMENT FOR RELIABILITY                   │
 └─────────────────────────────────────────────────────────────────┘
 
 Fitness Score Calculation:
@@ -83,7 +83,7 @@ Paper (§3.3.4-6):
 ├─ Layer 3: Wait for cooldown (repair)
 └─ Layer 4: Rejoin with recovery boost
 
-🔄 Enhanced for LAN (Your Implementation - 3 Layers):
+Enhanced for LAN (Your Implementation - 3 Layers):
 ┌──────────────────────────────────────┐
 │ Layer 1: Link Rewording              │
 │ Remove from active routing pool      │
@@ -155,7 +155,7 @@ E_tx(d) = k1·d² + k2  (proportional to distance)
 
 YOUR LAN: Capacity Headroom Model
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ CORRECT ADAPTATION:
+CORRECT ADAPTATION:
 
 Capacity Headroom = 1.0 - utilization_rate
 
@@ -200,26 +200,26 @@ routing_path.py     Routing optimization    RoutingPathGA
 ```
 Parameter              Paper         Implementation    Status
 ═══════════════════════════════════════════════════════════════════
-PSO Inertia (w)       0.7-0.9       0.6              ✅ Good
-PSO Cognitive (c1)    1.0-2.0       1.4              ✅ Good
-PSO Social (c2)       1.0-2.0       1.4              ✅ Good
-PSO Particles         Variable      16               ✅ Reasonable
-PSO Iterations        Variable      20               ✅ Reasonable
+PSO Inertia (w)       0.7-0.9       0.6               Good
+PSO Cognitive (c1)    1.0-2.0       1.4               Good
+PSO Social (c2)       1.0-2.0       1.4               Good
+PSO Particles         Variable      16                Reasonable
+PSO Iterations        Variable      20                Reasonable
 
-GA Population         Variable      20               ✅ Reasonable
-GA Generations        Variable      15               ✅ Reasonable
-GA Mutation Prob      0.01-0.1      0.2              ✅ Good
+GA Population         Variable      20                Reasonable
+GA Generations        Variable      15                Reasonable
+GA Mutation Prob      0.01-0.1      0.2               Good
 
 Fitness Weights       w1=?          w1=0.25 (latency)
                       w2=?          w2=0.15 (comm)
                       w3=?          w3=0.25 (energy→headroom)
                       w4=?          w4=0.20 (coverage)
                       w5=N/A        w5=0.15 (fault history)
-                                    ✅ New enhancement
+                                     New enhancement
 
-Cooldown Steps        Variable      8                ✅ Good
-Recovery Boost        Variable      0.35             ✅ Good
-Gossip Hops          3-5           3                 ✅ Good
+Cooldown Steps        Variable      8                 Good
+Recovery Boost        Variable      0.35              Good
+Gossip Hops          3-5           3                  Good
 ```
 
 ## Summary Checklist
