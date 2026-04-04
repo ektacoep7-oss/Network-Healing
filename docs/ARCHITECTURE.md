@@ -3,7 +3,7 @@
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 1. [Paper Overview & Context](#paper-overview)
 2. [Architecture Overview](#architecture)
 3. [Step-by-Step Implementation](#steps)
@@ -61,7 +61,7 @@ Your Implementation:
 
 ## <a name="steps"></a> 3. Step-by-Step Implementation Analysis
 
-### ✅ STAGE 1: Resource Modeling & Classification
+###  STAGE 1: Resource Modeling & Classification
 **File**: `ftgso_sim/model.py`
 
 #### Purpose
@@ -116,17 +116,17 @@ class Instance:
 ```
 
 **WSN-to-LAN Mapping**:
-- **Sensor Node (SN)** → **Server Instance** ✅
+- **Sensor Node (SN)** → **Server Instance** 
   - In WSN: limited battery, sensors, transmission power
   - In LAN: CPU cores, RAM, network bandwidth
-- **Multi-tier classification** → **New addition for server networks** ✅
+- **Multi-tier classification** → **New addition for server networks** 
   - Not in original paper, but essential for heterogeneous server environments
 
-**✅ VERIFICATION**: Stage 1 properly adapted. Added `EnhancedInstanceMetrics` for detailed server resource tracking beyond the paper's original scope.
+** VERIFICATION**: Stage 1 properly adapted. Added `EnhancedInstanceMetrics` for detailed server resource tracking beyond the paper's original scope.
 
 ---
 
-### ✅ STAGE 2: Cluster Formation & Master Node Election
+### STAGE 2: Cluster Formation & Master Node Election
 **File**: `ftgso_sim/cluster.py`
 
 #### Purpose (Paper §3.3.2)
@@ -173,17 +173,17 @@ def form_clusters(self, instances, rng):
 - **Dynamic re-election** when heads fail (Paper §3.3.5)
 
 **WSN-to-LAN Mapping**:
-- **Cluster Head (CH)** → **Master Node/Coordinator** ✅
+- **Cluster Head (CH)** → **Master Node/Coordinator** 
   - In WSN: gathers sensor data, manages cluster
   - In LAN: coordinates load balancing, makes routing decisions
-- **Multi-objective selection** → **Unchanged** ✅
+- **Multi-objective selection** → **Unchanged** 
   - Still uses 4 objectives from paper
 
-**✅ VERIFICATION**: Correctly implemented. Cluster heads elected using multi-objective fitness, matching paper's §3.3.2 approach.
+** VERIFICATION**: Correctly implemented. Cluster heads elected using multi-objective fitness, matching paper's §3.3.2 approach.
 
 ---
 
-### ✅ STAGE 3: Fault Detection & Classification
+###  STAGE 3: Fault Detection & Classification
 **File**: `ftgso_sim/fault.py`
 
 #### Purpose (Paper §3.3.4)
@@ -221,19 +221,19 @@ def detect_fault(self, instance_id, is_reachable, serveability,
 ```
 
 **WSN-to-LAN Mapping**:
-- **Node failure detection** → **Hardware/software failure detection** ✅
+- **Node failure detection** → **Hardware/software failure detection** 
   - In WSN: battery drained, sensor malfunction, link loss
   - In LAN: server crash, overload, network jitter
-- **Fault types** → **New classification scheme** ✅
+- **Fault types** → **New classification scheme** 
   - Hard: unrecoverable (server crashed)
   - Soft: recoverable (CPU saturated)
   - Transient: temporary (network hiccup)
 
-**✅ VERIFICATION**: Properly adapted. Added sophisticated fault classification beyond paper (which only mentions "low fitness" detection in §3.3.4).
+** VERIFICATION**: Properly adapted. Added sophisticated fault classification beyond paper (which only mentions "low fitness" detection in §3.3.4).
 
 ---
 
-### 🔴 STAGE 3b: Gossip Protocol (Paper §3.3.3)
+### STAGE 3b: Gossip Protocol (Paper §3.3.3)
 **File**: `ftgso_sim/gossip.py`
 
 #### Purpose (Paper §3.3.3)
@@ -270,17 +270,17 @@ def propagate_step(self, rng):
 ```
 
 **WSN-to-LAN Mapping**:
-- **Gossip protocol** → **Distributed anomaly sharing** ✅
+- **Gossip protocol** → **Distributed anomaly sharing** 
   - In WSN: nodes exchange battery/signal info
   - In LAN: servers exchange fault/load info
-- **Hop-limited propagation** → **Remains similar** ✅
+- **Hop-limited propagation** → **Remains similar** 
   - Prevents message explosion
 
-**✅ VERIFICATION**: Correctly adapted. Gossip mechanism for server network coordination implemented.
+** VERIFICATION**: Correctly adapted. Gossip mechanism for server network coordination implemented.
 
 ---
 
-### ✅ STAGE 4: Multi-Objective Fitness & GA+PSO Optimization
+### STAGE 4: Multi-Objective Fitness & GA+PSO Optimization
 **File**: `ftgso_sim/fitness.py` + `ftgso_sim/optimizer/*.py`
 
 #### Purpose (Paper §3.2.2, §3.3.2)
@@ -419,12 +419,12 @@ def select_candidate_gso(objective_values, rng):
 ```
 
 **WSN-to-LAN Mapping**:
-- **Routing decision** → **Server selection for load balancing** ✅
+- **Routing decision** → **Server selection for load balancing** 
   - In WSN: choose next hop in routing path
   - In LAN: choose target server for request
-- **Multi-objective fitness** → **Remains same 4 objectives** ✅
+- **Multi-objective fitness** → **Remains same 4 objectives** 
   - Paper's framework directly applicable
-- **PSO+GA** → **Unchanged optimization strategy** ✅
+- **PSO+GA** → **Unchanged optimization strategy** 
   - PSO explores instance space
   - GA refines around best candidate
 
@@ -438,11 +438,11 @@ def select_candidate_gso(objective_values, rng):
 | Generations | Variable | 15 | GA iterations |
 | Mutation prob | 0.01-0.1 | 0.2 | Exploration in GA |
 
-**✅ VERIFICATION**: PSO+GA ideology correctly implemented. Multi-objective fitness adapted from energy optimization to server resource optimization with added fault history penalty.
+** VERIFICATION**: PSO+GA ideology correctly implemented. Multi-objective fitness adapted from energy optimization to server resource optimization with added fault history penalty.
 
 ---
 
-### ✅ STAGE 5: Three-Layer Self-Healing
+### STAGE 5: Three-Layer Self-Healing
 **File**: `ftgso_sim/healing.py`
 
 #### Purpose (Paper §3.3.4-§3.3.6)
@@ -515,23 +515,23 @@ def apply_recovery_boost(self, rejoin_mask, serveability, headroom,
 ```
 
 **WSN-to-LAN Mapping**:
-- **Low-fitness detection** → **Failed/degraded server detection** ✅
+- **Low-fitness detection** → **Failed/degraded server detection** 
   - In WSN: low battery, retransmissions, packet loss
   - In LAN: high latency, dropped connections, high load
-- **Drain from routing** → **Remove from active pool** ✅
-- **Cooldown + restart** → **Maintenance window + restart** ✅
-- **Recovery boost** → **Fresh restart with optimized state** ✅
+- **Drain from routing** → **Remove from active pool** 
+- **Cooldown + restart** → **Maintenance window + restart** 
+- **Recovery boost** → **Fresh restart with optimized state** 
 
 **Key Differences from Paper**:
 - **Paper**: Single-layer healing (drain + restart)
 - **Implementation**: Three-layer healing with migration and shedding
   - Layer 2 & 3 are **new enhancements** for server networks
 
-**✅ VERIFICATION**: Paper's healing strategy correctly implemented in Layer 1. Layers 2-3 are enhancements appropriate for server networks (migration, load shedding).
+** VERIFICATION**: Paper's healing strategy correctly implemented in Layer 1. Layers 2-3 are enhancements appropriate for server networks (migration, load shedding).
 
 ---
 
-### ✅ STAGE 6: Performance Metrics
+###  STAGE 6: Performance Metrics
 **File**: `ftgso_sim/metrics.py`
 
 #### Metrics Tracked
@@ -568,11 +568,11 @@ MTTH = mean(recovery_times)                # simulation steps
 | Latency | E2E Delay | Job Turnaround Time | JTT |
 | Recovery Time | (implicit) | Mean Time to Heal | MTTH |
 
-**✅ VERIFICATION**: Metrics directly adapted from paper's evaluation criteria to server network performance measurement.
+** VERIFICATION**: Metrics directly adapted from paper's evaluation criteria to server network performance measurement.
 
 ---
 
-### ✅ STAGE 7: Policy Comparison & Baselines
+###  STAGE 7: Policy Comparison & Baselines
 **File**: `ftgso_sim/baselines.py`
 
 #### Baseline Policies
@@ -590,46 +590,46 @@ MTTH = mean(recovery_times)                # simulation steps
 SC-FTGSO > Kubernetes > GA-Only ≈ PSO-Only > Round-Robin
 ```
 
-**✅ VERIFICATION**: Comprehensive baseline comparison implemented.
+** VERIFICATION**: Comprehensive baseline comparison implemented.
 
 ---
 
 ## <a name="wsn-to-lan"></a> 4. WSN-to-LAN Adaptation Verification
 
-### ✅ Component Mapping Verification
+### Component Mapping Verification
 
 | Paper Concept | WSN Context | Your LAN Adaptation | Status |
 |---|---|---|---|
-| **Sensor Node** | Battery-powered device | Server instance | ✅ Correct |
-| **Cluster** | Group of nearby sensors | Logical group of servers | ✅ Correct |
-| **Cluster Head** | Data aggregator | Master node/coordinator | ✅ Correct |
-| **Link Quality** | SNR, packet loss rate | Network latency, jitter | ✅ Correct |
-| **Energy** | Battery drain rate | Server resource headroom | ✅ Correct |
-| **Fault** | Signal loss, battery drain | Server crash, overload | ✅ Correct |
-| **Routing** | Path selection via CH | Request routing to server | ✅ Correct |
-| **Gossip** | Anomaly sharing | Distributed fault info | ✅ Correct |
+| **Sensor Node** | Battery-powered device | Server instance |  Correct |
+| **Cluster** | Group of nearby sensors | Logical group of servers |  Correct |
+| **Cluster Head** | Data aggregator | Master node/coordinator |  Correct |
+| **Link Quality** | SNR, packet loss rate | Network latency, jitter |  Correct |
+| **Energy** | Battery drain rate | Server resource headroom |  Correct |
+| **Fault** | Signal loss, battery drain | Server crash, overload |  Correct |
+| **Routing** | Path selection via CH | Request routing to server |  Correct |
+| **Gossip** | Anomaly sharing | Distributed fault info |  Correct |
 
-### ✅ Key Adaptations Made
+###  Key Adaptations Made
 
 1. **Resource Model**: 
-   - ✅ Replaced battery with CPU/memory/bandwidth
-   - ✅ Added resource tier classification (T1/T2/T3)
-   - ✅ Enhanced metrics for detailed tracking
+   -  Replaced battery with CPU/memory/bandwidth
+   -  Added resource tier classification (T1/T2/T3)
+   -  Enhanced metrics for detailed tracking
 
 2. **Failure Model**:
-   - ✅ Hard faults (server down)
-   - ✅ Soft faults (resource exhausted)
-   - ✅ Transient faults (temporary spikes)
+   -  Hard faults (server down)
+   -  Soft faults (resource exhausted)
+   -  Transient faults (temporary spikes)
 
 3. **Healing Strategy**:
-   - ✅ Layer 1: Remove from routing (drain)
-   - ✅ Layer 2: Migrate workload (NEW for LAN)
-   - ✅ Layer 3: Shed load preemptively (NEW for LAN)
+   -  Layer 1: Remove from routing (drain)
+   -  Layer 2: Migrate workload (NEW for LAN)
+   -  Layer 3: Shed load preemptively (NEW for LAN)
 
 4. **Metrics**:
-   - ✅ TCR/JDR instead of PDR/PLR
-   - ✅ JTT instead of E2E latency
-   - ✅ MTTH for recovery measurement
+   -  TCR/JDR instead of PDR/PLR
+   -  JTT instead of E2E latency
+   -  MTTH for recovery measurement
 
 ---
 
@@ -650,7 +650,7 @@ proximity_normalized = normalize_minimize(latency_ms, 1.0, 500.0)
 # Lower latency = higher score
 fitness_contribution = 0.25 * proximity_normalized
 ```
-✅ **Correctly adapted**
+ **Correctly adapted**
 
 ---
 
@@ -666,7 +666,7 @@ comm_cost_normalized = normalize_minimize(net_penalty, 0.0, 1.0)
 # Better network quality = higher score
 fitness_contribution = 0.15 * comm_cost_normalized
 ```
-✅ **Correctly adapted**
+ **Correctly adapted**
 
 ---
 
@@ -686,7 +686,7 @@ fitness_contribution = 0.25 * residual_normalized
 
 **Key Point**: Instead of battery %, use capacity headroom:
 - headroom = available_cpu + available_memory + available_bandwidth
-- ✅ **Correctly adapted**
+-  **Correctly adapted**
 
 ---
 
@@ -703,7 +703,7 @@ coverage_normalized = normalize_maximize(serveability, 0.0, 1.0)
 # More available service = higher score
 fitness_contribution = 0.20 * coverage_normalized
 ```
-✅ **Correctly adapted**
+ **Correctly adapted**
 
 ---
 
@@ -714,7 +714,7 @@ fault_penalty = penalty_for_recent_faults
 # Penalizes instances with history of failures
 fitness_contribution = 0.15 * (1.0 - fault_penalty)
 ```
-- ❓ **Not in paper**, but good addition for reliability
+-  **Not in paper**, but good addition for reliability
 
 ---
 
@@ -733,7 +733,7 @@ fitness_contribution = 0.15 * (1.0 - fault_penalty)
 
 ### Your Implementation Verification
 
-#### ✅ PSO Phase
+####  PSO Phase
 ```python
 def pso_optimize_1d(objective_values, rng, n_particles=16, n_iters=20):
     """
@@ -747,13 +747,13 @@ def pso_optimize_1d(objective_values, rng, n_particles=16, n_iters=20):
 ```
 
 **Verification**:
-- ✅ Initializes particles uniformly in [0, n-1]
-- ✅ Tracks personal and global bests
-- ✅ Updates velocities using standard PSO equation
-- ✅ Parameters: w=0.6, c1=1.4, c2=1.4 (reasonable)
-- ✅ Iterations=20, particles=16 (appropriate)
+-  Initializes particles uniformly in [0, n-1]
+-  Tracks personal and global bests
+-  Updates velocities using standard PSO equation
+-  Parameters: w=0.6, c1=1.4, c2=1.4 (reasonable)
+-  Iterations=20, particles=16 (appropriate)
 
-#### ✅ GA Phase
+####  GA Phase
 ```python
 def ga_refine_1d(objective_values, rng, seed_index, pop_size=20, generations=15):
     """
@@ -768,14 +768,14 @@ def ga_refine_1d(objective_values, rng, seed_index, pop_size=20, generations=15)
 ```
 
 **Verification**:
-- ✅ Seeded with PSO result (exploitation)
-- ✅ Crossover creates offspring from elites
-- ✅ Mutation explores neighborhood
-- ✅ Tournament selection maintains diversity
-- ✅ Elitism preserves best solution
-- ✅ Parameters: pop=20, gen=15, mut=0.2 (appropriate)
+-  Seeded with PSO result (exploitation)
+-  Crossover creates offspring from elites
+-  Mutation explores neighborhood
+-  Tournament selection maintains diversity
+-  Elitism preserves best solution
+-  Parameters: pop=20, gen=15, mut=0.2 (appropriate)
 
-#### ✅ Hybrid GSO
+####  Hybrid GSO
 ```python
 def select_candidate_gso(objective_values, rng):
     pso_pos = pso_optimize_1d(...)           # Explore
@@ -785,16 +785,16 @@ def select_candidate_gso(objective_values, rng):
 ```
 
 **Verification**:
-- ✅ PSO explores global space
-- ✅ GA refines in local region
-- ✅ Coupling is correct (PSO → GA)
-- ✅ Avoids local optima (PSO gives diversity)
+-  PSO explores global space
+-  GA refines in local region
+-  Coupling is correct (PSO → GA)
+-  Avoids local optima (PSO gives diversity)
 
 ---
 
 ## <a name="issues"></a> 7. Issues, Gaps & Recommendations
 
-### ✅ CORRECTLY IMPLEMENTED
+###  CORRECTLY IMPLEMENTED
 - [x] Resource model adapted to server networks
 - [x] Multi-objective fitness calculation
 - [x] PSO+GA hybrid optimization
@@ -806,7 +806,7 @@ def select_candidate_gso(objective_values, rng):
 
 ---
 
-### ⚠️ POTENTIAL IMPROVEMENTS
+### POTENTIAL IMPROVEMENTS
 
 #### 1. **Weighted Load Distribution** (ENHANCEMENT)
 **Current State**: Selects single best instance
@@ -897,7 +897,7 @@ class RoutingPath:
 # Use for failover: primary → backup1 → backup2
 ```
 
-**Status**: ✅ Already implemented in `routing_path.py`!
+**Status**:  Already implemented in `routing_path.py`!
 
 ---
 
@@ -955,7 +955,7 @@ fail_prob = 0.01     # 1% per step
 
 ---
 
-### 🔴 CRITICAL ISSUE: Optimization Scope
+### CRITICAL ISSUE: Optimization Scope
 
 **Issue**: You optimize for server selection, not for energy (which was wrong)
 
@@ -972,36 +972,36 @@ E_rx = k3  (reception)
 = 1.0 - (cpu_used + mem_used + io_used) / 3
 ```
 
-**Assessment**: ✅ **CORRECT** - You properly adapted from battery-based energy to capacity-based energy, appropriate for server networks.
+**Assessment**:  **CORRECT** - You properly adapted from battery-based energy to capacity-based energy, appropriate for server networks.
 
 ---
 
-### 📝 Summary of Adaptation Quality
+### Summary of Adaptation Quality
 
 | Aspect | Paper | Your LAN | Quality |
 |--------|-------|---------|---------|
-| **Objectives** | 4 (proximity, comm, energy, coverage) | 5 (+ fault history) | ✅ Good |
-| **GA+PSO** | Hybrid optimization | PSO → GA pipeline | ✅ Correct |
-| **Clustering** | Logical groups | Server groups | ✅ Adapted |
-| **Fault Model** | 1 type (low fitness) | 3 types (hard/soft/transient) | ✅ Enhanced |
-| **Healing** | Single layer | 3 layers | ✅ Enhanced |
-| **Gossip** | Anomaly sharing | Distributed info | ✅ Adapted |
-| **Load Model** | Single packet | Multiple tasks | ✅ Adapted |
-| **Metrics** | Delivery/latency | TCR/JDR/JTT/MTTH | ✅ Enhanced |
+| **Objectives** | 4 (proximity, comm, energy, coverage) | 5 (+ fault history) |  Good |
+| **GA+PSO** | Hybrid optimization | PSO → GA pipeline |  Correct |
+| **Clustering** | Logical groups | Server groups |  Adapted |
+| **Fault Model** | 1 type (low fitness) | 3 types (hard/soft/transient) |  Enhanced |
+| **Healing** | Single layer | 3 layers |  Enhanced |
+| **Gossip** | Anomaly sharing | Distributed info |  Adapted |
+| **Load Model** | Single packet | Multiple tasks |  Adapted |
+| **Metrics** | Delivery/latency | TCR/JDR/JTT/MTTH |  Enhanced |
 
 ---
 
-## 🎯 Final Verdict
+##  Final Verdict
 
-### Your Implementation: **EXCELLENT ADAPTATION** ✅
+### Your Implementation: **EXCELLENT ADAPTATION** 
 
 **Strengths**:
-1. ✅ Correctly maps WSN concepts to server networks
-2. ✅ GA+PSO ideology properly implemented
-3. ✅ Objectives adapted from energy to capacity headroom
-4. ✅ Enhanced with additional features (3-layer healing, fault classification)
-5. ✅ Stage-by-stage implementation is systematic
-6. ✅ Visual simulation demonstrates all stages
+1.  Correctly maps WSN concepts to server networks
+2.  GA+PSO ideology properly implemented
+3.  Objectives adapted from energy to capacity headroom
+4.  Enhanced with additional features (3-layer healing, fault classification)
+5.  Stage-by-stage implementation is systematic
+6.  Visual simulation demonstrates all stages
 
 **What You Got Right**:
 - Replaced battery energy → server capacity headroom
