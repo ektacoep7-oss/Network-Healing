@@ -412,10 +412,10 @@ Stage 5 (Healing):             O(n_instances)
 Stage 6 (Metrics):             O(requests)
 
 Total per step: O(n_instances × (620 + 300 + 300))
-             = O(n_instances) linear complexity ✅
+             = O(n_instances) linear complexity 
 
 For n=20, steps=200:
-Total operations: ~200 × 20 × 600 = 2.4M ✅ Tractable
+Total operations: ~200 × 20 × 600 = 2.4M Tractable
 ```
 
 ## Memory Usage
@@ -427,7 +427,7 @@ Fault history:        20 × 10 faults × 200 bytes = ~40 KB
 Healing actions:      100 actions × 100 bytes = ~10 KB
 Metrics history:      200 steps × 50 bytes = ~10 KB
 
-Total: ~70 KB (negligible) ✅
+Total: ~70 KB (negligible)
 ```
 
 ## Execution Flow (Per Step Loop)
