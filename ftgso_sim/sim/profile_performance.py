@@ -246,7 +246,7 @@ def main():
         print("   ✗ Fault detection is consuming >25% of time")
         print("     → SOLUTION: Use vectorized operations, cache fitness scores")
     
-    print("\n✅ OPTIMIZATION RECOMMENDATIONS:")
+    print("\n OPTIMIZATION RECOMMENDATIONS:")
     print("   1. Increase PSO tune interval: 50 → 100 (less frequent tuning)")
     print("   2. Skip gossip on minor faults (threshold-based)")
     print("   3. Cache fitness calculations between steps")
