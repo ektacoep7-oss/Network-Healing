@@ -1,82 +1,82 @@
 # FTGSO Project: Complete Codebase Structure & Organization
 
-## 📁 Directory Tree
+##  Directory Tree
 
 ```
 CN_project/
 │
-├── 📄 README.md                          # Project overview & quick start
-├── 📄 requirements.txt                   # Dependencies: numpy, matplotlib, pandas, seaborn
-├── 📄 PROJECT_ANALYSIS.md                # Detailed 7-stage implementation explanation
-├── 📄 QUICK_REFERENCE.md                 # Fast lookup: Paper → Code mapping
-├── 📄 DATA_FLOW.md                       # Complete data flow & system architecture
-├── 📄 CODEBASE_STRUCTURE.md              # This file
+├──  README.md                          # Project overview & quick start
+├──  requirements.txt                   # Dependencies: numpy, matplotlib, pandas, seaborn
+├──  PROJECT_ANALYSIS.md                # Detailed 7-stage implementation explanation
+├──  QUICK_REFERENCE.md                 # Fast lookup: Paper → Code mapping
+├──  DATA_FLOW.md                       # Complete data flow & system architecture
+├──  CODEBASE_STRUCTURE.md              # This file
 │
-├── 📁 ftgso_sim/                         # Main simulation package
+├──  ftgso_sim/                         # Main simulation package
 │   │
-│   ├── 📄 __init__.py                    # Package marker
+│   ├──  __init__.py                    # Package marker
 │   │
 │   ├── ┌─ LAYER 1: RESOURCE MODELING ─┐
-│   ├── 📄 model.py                       # Data structures (Instance, Metrics, ResourceTier)
+│   ├──  model.py                       # Data structures (Instance, Metrics, ResourceTier)
 │   │
 │   ├── ┌─ LAYER 2: CLUSTERING ─────────┐
-│   ├── 📄 cluster.py                     # Cluster formation & master node election
+│   ├──  cluster.py                     # Cluster formation & master node election
 │   │
 │   ├── ┌─ LAYER 3: FAULT DETECTION ────┐
-│   ├── 📄 fault.py                       # Fault classification (hard/soft/transient)
-│   ├── 📄 gossip.py                      # Distributed fault dissemination protocol
+│   ├──  fault.py                       # Fault classification (hard/soft/transient)
+│   ├──  gossip.py                      # Distributed fault dissemination protocol
 │   │
 │   ├── ┌─ LAYER 4: OPTIMIZATION ───────┐
-│   ├── 📄 fitness.py                     # Multi-objective fitness calculation (5 objectives)
-│   ├── 📄 routing_path.py                # Enhanced GA for routing paths with backups
+│   ├──  fitness.py                     # Multi-objective fitness calculation (5 objectives)
+│   ├──  routing_path.py                # Enhanced GA for routing paths with backups
 │   │
-│   ├── 📁 optimizer/                     # Hybrid PSO + GA optimization
-│   │   ├── 📄 __init__.py
-│   │   ├── 📄 pso.py                     # Particle Swarm Optimization (exploration)
-│   │   ├── 📄 ga.py                      # Genetic Algorithm (refinement)
-│   │   └── 📄 gso.py                     # Hybrid GSO = PSO→GA pipeline
+│   ├──  optimizer/                     # Hybrid PSO + GA optimization
+│   │   ├──  __init__.py
+│   │   ├──  pso.py                     # Particle Swarm Optimization (exploration)
+│   │   ├──  ga.py                      # Genetic Algorithm (refinement)
+│   │   └──  gso.py                     # Hybrid GSO = PSO→GA pipeline
 │   │
 │   ├── ┌─ LAYER 5: SELF-HEALING ───────┐
-│   ├── 📄 healing.py                     # 3-layer self-healing mechanism
+│   ├──  healing.py                     # 3-layer self-healing mechanism
 │   │
 │   ├── ┌─ LAYER 6: METRICS ────────────┐
-│   ├── 📄 metrics.py                     # Performance tracking (TCR, JDR, JTT, MTTH)
+│   ├──  metrics.py                     # Performance tracking (TCR, JDR, JTT, MTTH)
 │   │
 │   ├── ┌─ LAYER 7: BASELINES ──────────┐
-│   ├── 📄 baselines.py                   # Baseline policies & Kubernetes comparison
+│   ├──  baselines.py                   # Baseline policies & Kubernetes comparison
 │   │
-│   ├── 📁 sim/                           # Simulation engines
-│   │   ├── 📄 __init__.py
-│   │   ├── 📄 step2.py                   # ⭐ CORE SIMULATION LOOP (all 7 stages)
-│   │   ├── 📄 run.py                     # Entry point for default simulation
-│   │   ├── 📄 sweep.py                   # Parameter sweep runner (Stage 8)
-│   │   └── 📄 ablation.py                # Ablation study runner (Stage 8)
+│   ├──  sim/                           # Simulation engines
+│   │   ├──  __init__.py
+│   │   ├──  step2.py                   # CORE SIMULATION LOOP (all 7 stages)
+│   │   ├──  run.py                     # Entry point for default simulation
+│   │   ├──  sweep.py                   # Parameter sweep runner (Stage 8)
+│   │   └──  ablation.py                # Ablation study runner (Stage 8)
 │   │
-│   └── 📁 prototype/                     # Local multiprocess prototype demo
-│       ├── 📄 __init__.py
-│       ├── 📄 demo.py                    # ⭐ RUNNABLE DEMO (multiprocess implementation)
-│       ├── 📄 router.py                  # Worker pool manager & routing
-│       ├── 📄 worker.py                  # Simulated worker process
-│       └── 📄 healer.py                  # Self-healing interface
+│   └──  prototype/                     # Local multiprocess prototype demo
+│       ├──  __init__.py
+│       ├──  demo.py                    # RUNNABLE DEMO (multiprocess implementation)
+│       ├──  router.py                  # Worker pool manager & routing
+│       ├──  worker.py                  # Simulated worker process
+│       └──  healer.py                  # Self-healing interface
 │
-├── 📁 outputs/                           # Main simulation results
-│   └── 📄 summary.csv                    # Results from step2.py
+├──  outputs/                           # Main simulation results
+│   └──  summary.csv                    # Results from step2.py
 │
-├── 📁 sweep_outputs/                     # Parameter sweep results
-│   ├── 📄 runs.csv
-│   ├── 📄 summary_agg.csv
-│   └── 📄 summary_by_scenario.csv
+├──  sweep_outputs/                     # Parameter sweep results
+│   ├──  runs.csv
+│   ├──  summary_agg.csv
+│   └──  summary_by_scenario.csv
 │
-├── 📁 ablation_outputs/                  # Ablation study results
-│   └── 📄 ablation_summary.csv
+├──  ablation_outputs/                  # Ablation study results
+│   └──  ablation_summary.csv
 │
-└── 📄 visual_simulation.ipynb            # ⭐ JUPYTER NOTEBOOK with 25 cells of visualization
+└──  visual_simulation.ipynb            # JUPYTER NOTEBOOK with 25 cells of visualization
 
 ```
 
 ---
 
-## 🏗️ Architecture Layers
+## Architecture Layers
 
 ### **Layer 1: Data Models** (`model.py`)
 ```python
@@ -88,7 +88,7 @@ ResourceTier (Enum)
 InstanceMetrics (Dataclass)
   ├── latency_ms: float          # Network response time (1-500ms)
   ├── net_penalty: float         # Quality penalty (0-1)
-  ├── headroom: float            # Available capacity ⭐ (replaces "energy %" from WSN)
+  ├── headroom: float            # Available capacity (replaces "energy %" from WSN)
   └── serveability: float        # Service functionality (0-1)
 
 EnhancedInstanceMetrics (Dataclass)
@@ -183,7 +183,7 @@ GossipProtocol (Class)
 FitnessWeights (Dataclass)
   ├── proximity: 0.25          # Latency weight
   ├── communication_cost: 0.15 # Penalty weight
-  ├── residual_energy: 0.25    # Headroom weight ⭐
+  ├── residual_energy: 0.25    # Headroom weight
   ├── coverage: 0.20           # Serveability weight
   └── fault_history: 0.15      # Fault penalty weight
 
@@ -348,7 +348,7 @@ SCFTGSOComparison (Class)
 
 ### **Simulation Engines**
 
-#### **sim/step2.py: ⭐ CORE SIMULATION LOOP**
+#### **sim/step2.py: CORE SIMULATION LOOP**
 ```python
 SimConfig (Dataclass)
   ├── n_instances, n_groups, n_steps
@@ -452,7 +452,7 @@ main():
 
 ### **Local Prototype** (Multiprocess Implementation)
 
-#### **prototype/demo.py: ⭐ RUNNABLE DEMO**
+#### **prototype/demo.py: RUNNABLE DEMO**
 ```python
 main(args):
   │
@@ -548,7 +548,7 @@ Exports:   visual_simulation_summary.csv
 
 ---
 
-## 📊 Code Statistics
+## Code Statistics
 
 | Component | LOC | Purpose |
 |-----------|-----|---------|
@@ -572,7 +572,7 @@ Exports:   visual_simulation_summary.csv
 
 ---
 
-## 🔄 Dependency Graph
+## Dependency Graph
 
 ```
                          (No dependencies)
@@ -615,7 +615,7 @@ Exports:   visual_simulation_summary.csv
 
 ---
 
-## 🚀 How to Run Each Component
+## How to Run Each Component
 
 ### **1. Core Simulation (default config)**
 ```bash
@@ -659,13 +659,13 @@ jupyter notebook visual_simulation.ipynb
 
 ---
 
-## 📋 Summary
+## Summary
 
 **What:** Complete FTGSO simulation framework with:
-- ✅ 7 operational stages (resource modeling → baselines)
-- ✅ Hybrid PSO+GA optimization
-- ✅ Multi-layer self-healing
-- ✅ Comprehensive metrics & comparison
+-  7 operational stages (resource modeling → baselines)
+-  Hybrid PSO+GA optimization
+-  Multi-layer self-healing
+-  Comprehensive metrics & comparison
 
 **How Organized:**
 - **ftgso_sim/model.py** → Data layer
