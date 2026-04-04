@@ -2,7 +2,7 @@
 
 ## Current vs Recommended Structure
 
-### ❌ Current (Flat)
+### Current (Flat)
 ```
 CN_project/
 ├── README.md
@@ -25,11 +25,11 @@ CN_project/
 └── [other dirs]
 ```
 
-### ✅ Recommended (Professional)
+### Recommended
 ```
 CN_project/
 │
-├── 📁 ftgso_sim/                    ← Core package (rename to src/ftgso or keep as-is)
+├── ftgso_sim/                    ← Core package (rename to src/ftgso or keep as-is)
 │   ├── __init__.py
 │   ├── model.py
 │   ├── cluster.py
@@ -61,7 +61,7 @@ CN_project/
 │       ├── worker.py
 │       └── healer.py
 │
-├── 📁 docs/                         ← Documentation (REORGANIZE HERE)
+├──  docs/                         ← Documentation (REORGANIZE HERE)
 │   ├── README.md                    ← Main project overview
 │   ├── ARCHITECTURE.md              ← PROJECT_ANALYSIS.md (renamed)
 │   ├── API_REFERENCE.md             ← QUICK_REFERENCE.md (renamed)
@@ -75,20 +75,20 @@ CN_project/
 │       ├── optimization.md
 │       └── healing.md
 │
-├── 📁 examples/                     ← Example scripts (NEW)
+├──  examples/                     ← Example scripts (NEW)
 │   ├── README.md                    ← How to run examples
 │   ├── basic_simulation.py          ← Extract from step2.py
 │   ├── custom_policy.py             ← How to add custom routing
 │   ├── parameter_sweep_example.py   ← Extract from sweep.py
 │   └── visualize_results.py         ← Extract from notebook
 │
-├── 📁 scripts/                      ← CLI utilities (NEW)
+├──  scripts/                      ← CLI utilities (NEW)
 │   ├── run_simulation.py            ← Wrapper around sim/step2.py
 │   ├── run_sweep.py                 ← Wrapper around sim/sweep.py
 │   ├── run_ablation.py              ← Wrapper around sim/ablation.py
 │   └── run_prototype.py             ← Wrapper around prototype/demo.py
 │
-├── 📁 tests/                        ← Unit tests (NEW)
+├──  tests/                        ← Unit tests (NEW)
 │   ├── __init__.py
 │   ├── conftest.py                  ← Pytest fixtures
 │   ├── test_model.py
@@ -103,7 +103,7 @@ CN_project/
 │   ├── test_healing.py
 │   └── test_simulation.py
 │
-├── 📁 results/                      ← Organized output directory (RENAME)
+├──  results/                      ← Organized output directory (RENAME)
 │   ├── README.md                    ← Results guide
 │   ├── default_run/
 │   │   ├── summary.csv
@@ -118,17 +118,17 @@ CN_project/
 │       ├── metrics_comparison.png
 │       └── policy_comparison.png
 │
-├── 📁 notebooks/                    ← Jupyter notebooks (NEW)
+├──  notebooks/                    ← Jupyter notebooks (NEW)
 │   ├── analysis.ipynb               ← Visualization notebook (from visual_simulation.ipynb)
 │   ├── parameter_study.ipynb
 │   └── ablation_analysis.ipynb
 │
-├── 📁 config/                       ← Configuration files (NEW)
+├──  config/                       ← Configuration files (NEW)
 │   ├── default.yaml                 ← Default simulation config
 │   ├── large_scale.yaml             ← Large-scale config
 │   └── test.yaml                    ← Test config
 │
-├── 📁 data/                         ← Input data (if any) (NEW)
+├──  data/                         ← Input data (if any) (NEW)
 │   ├── README.md
 │   └── [input datasets if used]
 │
@@ -536,7 +536,7 @@ touch config/default.yaml config/large_scale.yaml config/test.yaml
 # Create root files
 touch setup.py pyproject.toml requirements-dev.txt Makefile LICENSE CONTRIBUTING.md
 
-echo "✅ Directory structure reorganized successfully!"
+echo " Directory structure reorganized successfully!"
 ```
 
 ---
@@ -560,10 +560,10 @@ CN_project/
 ```
 
 **Advantages:**
-- ✅ Avoids accidental imports from wrong location
-- ✅ Clearer separation of source code
-- ✅ Standard for pip distributions
-- ✅ Better for CI/CD
+-  Avoids accidental imports from wrong location
+-  Clearer separation of source code
+-  Standard for pip distributions
+-  Better for CI/CD
 
 **setup.py with src layout:**
 ```python
@@ -580,14 +580,3 @@ setup(
 
 ---
 
-## Next Steps
-
-1. **Choose your layout:** Standard or Src?
-2. **Run the reorganization** script or do it manually
-3. **Create setup.py** and requirements files
-4. **Test the installation:** `pip install -e .`
-5. **Run tests:** `pytest`
-6. **Update imports** if needed
-7. **Create .gitignore** and commit
-
-Would you like me to help you implement any of these steps?
