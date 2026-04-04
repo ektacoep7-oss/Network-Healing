@@ -9,7 +9,7 @@
 
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║                          STAGE 1: INITIALIZATION                             ║
+║                          STAGE 1: INITIALIZATION                              ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
     Input: Configuration
@@ -28,7 +28,7 @@
 
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║                   STAGE 2: CLUSTER FORMATION                                 ║
+║                   STAGE 2: CLUSTER FORMATION                                  ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
     Input: instances[]
@@ -47,7 +47,7 @@
 
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║              STAGE 3: FAULT DETECTION & GOSSIP (Per Step)                   ║
+║              STAGE 3: FAULT DETECTION & GOSSIP (Per Step)                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
     FOR EACH SIMULATION STEP:
@@ -55,19 +55,19 @@
     Input: Current metrics (latency, penalty, headroom, serveability)
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
-    │ Fault Injection (Probabilistic)                              │
+    │ Fault Injection (Probabilistic)                             │
     ├─────────────────────────────────────────────────────────────┤
     │ degrade_prob = 0.02  (degradation)                          │
     │  ├─ latency *= 1.3                                          │
     │  ├─ penalty += 0.1                                          │
     │  ├─ headroom -= 0.15                                        │
     │  └─ serveability -= 0.12                                    │
-    │                                                              │
+    │                                                             │
     │ fail_prob = 0.01  (hard failure)                            │
     │  ├─ healthy[i] = False                                      │
     │  ├─ serveability[i] = 0.0                                   │
     │  └─ headroom[i] -= 0.2                                      │
-    │                                                              │
+    │                                                             │
     │ passive_recovery_prob = 0.02  (environmental recovery)      │
     │  ├─ healthy[i] = True                                       │
     │  ├─ serveability[i] += 0.3                                  │
@@ -77,67 +77,67 @@
     └─────────────────────────────────────────────────────────────┘
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
-    │ Fault Detection                                              │
+    │ Fault Detection                                             │
     ├─────────────────────────────────────────────────────────────┤
     │ for each instance i:                                        │
     │   FaultDetector.detect_fault(i, is_reachable, metrics...)   │
-    │                                                              │
-    │   IF NOT reachable OR serveability < 0.0:                  │
+    │                                                             │
+    │   IF NOT reachable OR serveability < 0.0:                   │
     │     → FaultType.HARD_FAULT                                  │
-    │                                                              │
-    │   ELSE IF max(cpu_util, mem_util, io_util) > 0.5:          │
+    │                                                             │
+    │   ELSE IF max(cpu_util, mem_util, io_util) > 0.5:           │
     │     → FaultType.SOFT_FAULT                                  │
-    │                                                              │
+    │                                                             │
     │   ELSE IF transient_spike_detected():                       │
     │     → FaultType.TRANSIENT_FAULT                             │
-    │                                                              │
+    │                                                             │
     │   Store in fault_history[i]                                 │
     └─────────────────────────────────────────────────────────────┘
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
     │ Gossip Protocol: Disseminate Fault Info                     │
     ├─────────────────────────────────────────────────────────────┤
-    │ GossipProtocol.broadcast_fault(fault_event, cluster_id)    │
+    │ GossipProtocol.broadcast_fault(fault_event, cluster_id)     │
     │  ├─ Create AnomalyMessage                                   │
     │  ├─ Add to message_queue                                    │
     │  └─ Mark as seen to avoid duplicates                        │
-    │                                                              │
+    │                                                             │
     │ GossipProtocol.propagate_step()                             │
     │  ├─ For each message in queue:                              │
-    │  │  ├─ If hop_count < max_hops AND random() < diss_prob:   │
-    │  │  │  └─ Forward to other clusters (hop_count++)          │
+    │  │  ├─ If hop_count < max_hops AND random() < diss_prob:    │
+    │  │  │  └─ Forward to other clusters (hop_count++)           │
     │  │  └─ Else: discard                                        │
     │  └─ Remove old messages (> 10 steps)                        │
     └─────────────────────────────────────────────────────────────┘
 
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║              STAGE 4: MULTI-OBJECTIVE OPTIMIZATION                           ║
+║              STAGE 4: MULTI-OBJECTIVE OPTIMIZATION                            ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
     Input: Current metrics, fault_history for all instances
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
-    │ Calculate Fitness Scores                                     │
+    │ Calculate Fitness Scores                                    │
     ├─────────────────────────────────────────────────────────────┤
     │ for each instance i:                                        │
-    │                                                              │
-    │   f1 = normalize_minimize(latency_ms, 1.0, 500.0)          │
-    │   f2 = normalize_minimize(net_penalty, 0.0, 1.0)           │
-    │   f3 = normalize_maximize(headroom, 0.0, 1.0)              │
-    │   f4 = normalize_maximize(serveability, 0.0, 1.0)          │
-    │   f5 = clamp(1.0 - fault_penalty)                          │
-    │                                                              │
-    │   fitness[i] = 0.25·f1 + 0.15·f2 + 0.25·f3 +               │
+    │                                                             │
+    │   f1 = normalize_minimize(latency_ms, 1.0, 500.0)           │
+    │   f2 = normalize_minimize(net_penalty, 0.0, 1.0)            │
+    │   f3 = normalize_maximize(headroom, 0.0, 1.0)               │
+    │   f4 = normalize_maximize(serveability, 0.0, 1.0)           │
+    │   f5 = clamp(1.0 - fault_penalty)                           │
+    │                                                             │
+    │   fitness[i] = 0.25·f1 + 0.15·f2 + 0.25·f3 +                │
     │                0.20·f4 + 0.15·f5                            │
-    │                                                              │
-    │   Result: fitness[i] ∈ [0, 1] (higher is better)           │
+    │                                                             │
+    │   Result: fitness[i] ∈ [0, 1] (higher is better)            │
     └─────────────────────────────────────────────────────────────┘
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
     │ GSO (Genetical Swarm Optimization): Select Best Instance    │
     ├─────────────────────────────────────────────────────────────┤
-    │                                                              │
+    │                                                             │
     │ STEP 1: PSO Phase (Exploration)                             │
     │ ─────────────────────────────────                           │
     │ def pso_optimize_1d(fitness_values, n_particles=16):        │
@@ -145,7 +145,7 @@
     │     p.position ∈ [0, n_instances)  # Index space            │
     │     p.velocity ∈ ℝ                                          │
     │     p.pbest = initial position                              │
-    │                                                              │
+    │                                                             │
     │   for iteration in range(n_iterations=20):                  │
     │     for each particle p:                                    │
     │       # Update velocity                                     │
@@ -159,24 +159,24 @@
     │         pbest = pos_new                                     │
     │       # Update global best                                  │
     │       gbest = max_fitness_position                          │
-    │                                                              │
+    │                                                             │
     │   return gbest  # Best position found                       │
-    │                                                              │
+    │                                                             │
     │ Output: pso_best_index (promising region)                   │
-    │                                                              │
+    │                                                             │
     │ STEP 2: GA Phase (Refinement)                               │
     │ ─────────────────────────────────                           │
     │ def ga_refine_1d(fitness_values, seed_index):               │
     │   population = random_indices(n_instances)                  │
     │   population[0] = seed_index  # PSO result                  │
-    │                                                              │
+    │                                                             │
     │   for generation in range(15):                              │
     │     # Evaluate fitness                                      │
     │     scores = [fitness[idx] for idx in population]           │
-    │                                                              │
+    │                                                             │
     │     # Select top 50%                                        │
     │     elites = population[top_50_by_fitness]                  │
-    │                                                              │
+    │                                                             │
     │     # Generate new population                               │
     │     new_pop = [elite_best]  # Elitism                       │
     │     for i in range(1, pop_size):                            │
@@ -188,15 +188,15 @@
     │         child += randint(-2, 3)                             │
     │       new_pop.append(clip(child, 0, n-1))                   │
     │     population = new_pop                                    │
-    │                                                              │
+    │                                                             │
     │   return best(population)  # Refined solution               │
-    │                                                              │
+    │                                                             │
     │ STEP 3: Hybrid GSO                                          │
     │ ──────────────────                                          │
     │ best_instance = select_candidate_gso(fitness_values)        │
-    │   pso_pos = pso_optimize_1d(fitness_values)  # Explore     │
-    │   seed_idx = round(pso_pos)   # Extract best               │
-    │   best_idx = ga_refine_1d(fitness_values, seed_idx)  # Ref │
+    │   pso_pos = pso_optimize_1d(fitness_values)  # Explore      │
+    │   seed_idx = round(pso_pos)   # Extract best                │
+    │   best_idx = ga_refine_1d(fitness_values, seed_idx)  # Ref  │
     │   return best_idx              # Final selection            │
     └─────────────────────────────────────────────────────────────┘
                     ↓
@@ -204,15 +204,15 @@
 
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║                    STAGE 5: THREE-LAYER SELF-HEALING                         ║
+║                    STAGE 5: THREE-LAYER SELF-HEALING                          ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
     Input: fitness_scores[] for all instances
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
-    │ Identify Faulty Instances                                    │
+    │ Identify Faulty Instances                                   │
     ├─────────────────────────────────────────────────────────────┤
-    │ detected_faulty[i] = True  if:                               │
+    │ detected_faulty[i] = True  if:                              │
     │   ├─ fitness[i] < 0.3 (low fitness threshold)               │
     │   └─ Sustained for >= 5 consecutive steps                   │
     └─────────────────────────────────────────────────────────────┘
@@ -225,7 +225,7 @@
     │   drained[i] = True                                         │
     │   cooldown[i] = 8 steps  # Start timer                      │
     │   record_healing_action(LAYER_1, i)                         │
-    │                                                              │
+    │                                                             │
     │ Effect: Remove instance from request routing                │
     └─────────────────────────────────────────────────────────────┘
                     ↓
@@ -237,29 +237,29 @@
     │   load_to_migrate = get_current_load(i)                     │
     │   migrated = migrate_load(i, healthy_targets, load)         │
     │   record_healing_action(LAYER_2, i, effectiveness=migrated) │
-    │                                                              │
+    │                                                             │
     │ Effect: Distribute load to healthy servers                  │
     └─────────────────────────────────────────────────────────────┘
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
-    │ LAYER 3: Predictive Load Shedding                            │
+    │ LAYER 3: Predictive Load Shedding                           │
     ├─────────────────────────────────────────────────────────────┤
     │ should_shed[i] = (utilization[i] > 0.8) &                  │
     │                  (serveability[i] < 0.4)                    │
     │ for i in should_shed:                                       │
     │   reduce_incoming_load(i, by=50%)                           │
     │   record_healing_action(LAYER_3, i)                         │
-    │                                                              │
+    │                                                             │
     │ Effect: Prevent overload and cascading failures             │
     └─────────────────────────────────────────────────────────────┘
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
-    │ Cooldown Management                                          │
+    │ Cooldown Management                                         │
     ├─────────────────────────────────────────────────────────────┤
     │ for i in drained:                                           │
     │   cooldown[i] -= 1                                          │
     │   if cooldown[i] == 0:                                      │
-    │     rejoin_mask[i] = True  # Ready to rejoin               │
+    │     rejoin_mask[i] = True  # Ready to rejoin                │
     └─────────────────────────────────────────────────────────────┘
                     ↓
     ┌─────────────────────────────────────────────────────────────┐
@@ -273,13 +273,13 @@
     │   penalty[i] -= 0.10                                        │
     │   drained[i] = False                                        │
     │   healthy[i] = True                                         │
-    │                                                              │
+    │                                                             │
     │ Effect: Instance back in service with improved state        │
     └─────────────────────────────────────────────────────────────┘
 
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║                   STAGE 6: PERFORMANCE MONITORING                            ║
+║                   STAGE 6: PERFORMANCE MONITORING                             ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
     Track for Each Request/Step:
@@ -309,7 +309,7 @@
 
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║                   STAGE 7: POLICY COMPARISON                                 ║
+║                   STAGE 7: POLICY COMPARISON                                  ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
     Run Simulation With Different Policies:
